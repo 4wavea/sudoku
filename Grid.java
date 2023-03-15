@@ -61,7 +61,7 @@ public class Grid {
         return this.filterInvalidCellValues().isEmpty();
     }
 
-    public void print() {
+    public String toPrintableString() {
         StringBuilder sb = new StringBuilder();
         for (int rowIndex = 0; rowIndex < this.layout.rowsCount; rowIndex++) {
             for (int columnIndex = 0; columnIndex < this.layout.columnsCount; columnIndex++) {
@@ -72,6 +72,6 @@ public class Grid {
             }
             sb.append("\n");
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 }
