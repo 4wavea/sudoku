@@ -38,9 +38,15 @@ public class GridLayout {
         this.boxIndexes = IntStream.range(0, boxesCount).boxed().collect(Collectors.toSet());
         this.cellIndexes = Sets.cartesianProduct(rowIndexes, columnIndexes);
 
-        Map<Integer, Set<List<Integer>>> rows = cellIndexes.stream().collect(Collectors.groupingBy(CellIndex::getRowIndex, Collectors.toSet()));
-        Map<Integer, Set<List<Integer>>> columns = cellIndexes.stream().collect(Collectors.groupingBy(CellIndex::getColumnIndex, Collectors.toSet()));
-        Map<Integer, Set<List<Integer>>> boxes = cellIndexes.stream().collect(Collectors.groupingBy(this::getCellBoxIndex, Collectors.toSet()));
+        Map<Integer, Set<List<Integer>>> rows = cellIndexes.stream()
+                .collect(Collectors.groupingBy(CellIndex::getRowIndex,
+                        Collectors.toSet()));
+        Map<Integer, Set<List<Integer>>> columns = cellIndexes.stream()
+                .collect(Collectors.groupingBy(CellIndex::getColumnIndex,
+                        Collectors.toSet()));
+        Map<Integer, Set<List<Integer>>> boxes = cellIndexes.stream()
+                .collect(Collectors.groupingBy(this::getCellBoxIndex,
+                        Collectors.toSet()));
         this.groups = Stream.of(rows, columns, boxes)
                 .map(Map::values)
                 .flatMap(Collection::stream)
@@ -50,11 +56,13 @@ public class GridLayout {
                         .filter(group -> group.contains(cellIndex))
                         .collect(Collectors.toSet())));
         this.cellPeers = cellGroups.entrySet().stream()
-                .map(cellGroup -> new AbstractMap.SimpleEntry<>(cellGroup.getKey(), cellGroup.getValue().stream()
+                .flatMap(cellGroupEntry -> cellGroupEntry.getValue().stream()
                         .flatMap(Collection::stream)
-                        .filter(Predicate.not(groupCellIndex -> groupCellIndex.equals(cellGroup.getKey())))
-                        .collect(Collectors.toSet())))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                        .map(peer -> new AbstractMap.SimpleEntry<>(cellGroupEntry.getKey(), peer)))
+                .filter(Predicate.not(cellPeerEntry -> cellPeerEntry.getKey().equals(cellPeerEntry.getValue())))
+                .collect(Collectors.groupingBy(Map.Entry::getKey,
+                        Collectors.mapping(Map.Entry::getValue,
+                                Collectors.toSet())));
 
         this.values = values;
     }
