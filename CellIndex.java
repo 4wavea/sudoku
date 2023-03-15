@@ -2,10 +2,12 @@ import java.util.List;
 
 public class CellIndex {
     public static int getRowIndex(List<Integer> cellIndex) {
-        return cellIndex.get(0);
+        final int rowIndexElement = 0;
+        return cellIndex.get(rowIndexElement);
     }
 
     public static int getColumnIndex(List<Integer> cellIndex) {
-        return cellIndex.get(1);
+        final int columnIndexElement = 1;
+        return cellIndex.get(columnIndexElement);
     }
 }
