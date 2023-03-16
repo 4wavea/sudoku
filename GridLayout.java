@@ -64,7 +64,7 @@ public class GridLayout {
                         Collectors.mapping(Map.Entry::getValue,
                                 Collectors.toSet())));
 
-        this.values = values;
+        this.values = Set.copyOf(values);
     }
 
     public static GridLayout newClassic() {
@@ -79,6 +79,38 @@ public class GridLayout {
         int boxRowIndex = CellIndex.getRowIndex(cellIndex) / boxSideLength;
         int boxColumnIndex = CellIndex.getColumnIndex(cellIndex) / boxSideLength;
         return boxRowIndex * boxSideLength + boxColumnIndex;
+    }
+
+    public Optional<List<Integer>> getTopCellIndex(List<Integer> cellIndex) {
+        return this.cellIndexes.stream()
+                .filter(index ->
+                        CellIndex.getRowIndex(index) == CellIndex.getRowIndex(cellIndex) - 1
+                                && CellIndex.getColumnIndex(index) == CellIndex.getColumnIndex(cellIndex))
+                .findAny();
+    }
+
+    public Optional<List<Integer>> getBottomCellIndex(List<Integer> cellIndex) {
+        return this.cellIndexes.stream()
+                .filter(index ->
+                        CellIndex.getRowIndex(index) == CellIndex.getRowIndex(cellIndex) + 1
+                                && CellIndex.getColumnIndex(index) == CellIndex.getColumnIndex(cellIndex))
+                .findAny();
+    }
+
+    public Optional<List<Integer>> getLeftCellIndex(List<Integer> cellIndex) {
+        return this.cellIndexes.stream()
+                .filter(index ->
+                        CellIndex.getRowIndex(index) == CellIndex.getRowIndex(cellIndex)
+                                && CellIndex.getColumnIndex(index) == CellIndex.getColumnIndex(cellIndex) - 1)
+                .findAny();
+    }
+
+    public Optional<List<Integer>> getRightCellIndex(List<Integer> cellIndex) {
+        return this.cellIndexes.stream()
+                .filter(index ->
+                        CellIndex.getRowIndex(index) == CellIndex.getRowIndex(cellIndex)
+                                && CellIndex.getColumnIndex(index) == CellIndex.getColumnIndex(cellIndex) + 1)
+                .findAny();
     }
 
     @Override

@@ -71,9 +71,44 @@ public class CellValues {
         return sb.toString();
     }
 
+    public static boolean isCompatibleValue(GridLayout gridLayout, Map<List<Integer>, Integer> cellValues, List<Integer> cellIndex, int cellValue) {
+        return gridLayout.cellPeers.get(cellIndex).stream()
+                .filter(cellValues::containsKey)
+                .map(cellValues::get)
+                .noneMatch(peerValue -> peerValue.equals(cellValue));
+    }
+
     // solve
 
-    // todo: backtracking, assign/merge
+    public static boolean backtracking(GridLayout gridLayout, Map<List<Integer>, Integer> cellValues) {
+        List<List<Integer>> sortedCellIndexes = gridLayout.cellIndexes.stream().sorted(CellIndex.COMPARATOR).toList();
+        return backtracking(gridLayout, cellValues, sortedCellIndexes);
+    }
+
+    public static boolean backtracking(GridLayout gridLayout, Map<List<Integer>, Integer> cellValues, List<List<Integer>> cellIndexes) {
+        if (cellIndexes.isEmpty()) {
+            return true;
+        }
+        List<Integer> cellIndexesHead = cellIndexes.stream().findFirst().get();
+        List<List<Integer>> cellIndexesTail = cellIndexes.stream().skip(1).toList();
+
+        if (cellValues.containsKey(cellIndexesHead)) {
+            return backtracking(gridLayout, cellValues, cellIndexesTail);
+        }
+
+        for (int value : gridLayout.values) {
+            if (CellValues.isCompatibleValue(gridLayout, cellValues, cellIndexesHead, value)) {
+                cellValues.put(cellIndexesHead, value);
+                if (backtracking(gridLayout, cellValues, cellIndexesTail)) {
+                    return true;
+                }
+            }
+        }
+        cellValues.remove(cellIndexesHead);
+        return false;
+    }
+
+    // todo: assign/merge
 
     // convert
 
