@@ -1,0 +1,55 @@
+.root {
+    -fx-background-color: #ffffff;
+}
+
+.button {
+    -fx-font-size: 20;
+}
+
+.grid-pane {
+    -fx-background-color: #212121;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+}
+
+.text, .label {
+    -fx-font-size: 20;
+    -fx-text-fill: #212121;
+}
+
+.cell-pane {
+    -fx-background-color: #ffffff;
+}
+
+.cell-pane:hover {
+    -fx-background-color: #e1f3f8;
+}
+
+.clue-cell-pane {
+    -fx-background-color: #aeb0b5;
+}
+
+.clue-cell-pane:hover {
+    -fx-background-color: #e4e2e0;
+}
+
+.selected-cell-peer-pane {
+    -fx-background-color: #fad980;
+}
+
+.selected-cell-peer-pane:hover {
+    -fx-background-color: #fff1d2;
+}
+
+.selected-cell-pane {
+    -fx-background-color: #8ba6ca;
+}
+
+.selected-cell-pane:hover {
+    -fx-background-color: #dce4ef;
+}
+
+.cell-value-button {
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+}
